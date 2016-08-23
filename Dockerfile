@@ -44,7 +44,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential \
 
 ########################################
 # Set ant environment
-ENV ANT_ROOT /usr/bin/ant
+ENV ANT_ROOT /usr/bin
 
 ########################################
 # Install Android SDK
@@ -56,14 +56,10 @@ RUN cd /opt && wget -q https://dl.google.com/android/android-sdk_r24.4.1-linux.t
 
 ENV PATH ${PATH}:${ANDROID_SDK_ROOT}:${ANDROID_SDK_ROOT}/tools
 
-# NOTE: google is blocked by GFW in China,
-# So I use the proxy: http://android-mirror.bugly.qq.com:8080.
-# You can remove `--proxy-host android-mirror.bugly.qq.com --proxy-port 8080 -s`
-# in the following commands if you don't have to worry about this issue.
-RUN echo y | android update sdk --no-ui --all --filter platform-tools --proxy-host android-mirror.bugly.qq.com --proxy-port 8080 -s | grep 'package installed'
-RUN echo y | android update sdk --no-ui --all --filter extra-android-support --proxy-host android-mirror.bugly.qq.com --proxy-port 8080 -s | grep 'package installed'
-RUN echo y | android update sdk --no-ui --all --filter android-20 --proxy-host android-mirror.bugly.qq.com --proxy-port 8080 -s | grep 'package installed'
-RUN echo y | android update sdk --no-ui --all --filter build-tools-20.0.0 --proxy-host android-mirror.bugly.qq.com --proxy-port 8080 -s | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter platform-tools | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter extra-android-support | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter android-20 | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter build-tools-20.0.0 | grep 'package installed'
 
 ########################################
 # Install Android NDK
