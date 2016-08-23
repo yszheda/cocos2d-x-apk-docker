@@ -1,0 +1,109 @@
+FROM ubuntu:14.04
+
+MAINTAINER galois "yszheda@gmail.com"
+
+########################################
+# Install required packages
+# NOTE: add "RUN DEBIAN_FRONTEND=noninteractive" to set noninteractive ENV for the command.
+RUN DEBIAN_FRONTEND=noninteractive apt-get update -qq
+
+# Install add-apt-repository
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python-software-properties software-properties-common
+
+# Install oracle java
+RUN echo "debconf shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections
+RUN echo "debconf shared/accepted-oracle-license-v1-1 seen true" | debconf-set-selections
+RUN DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:webupd8team/java \
+    && apt-get update -qq
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential \
+    wget \
+    zip \
+    unzip \
+    php5 \
+    python \
+    oracle-java6-installer \
+    rsync \
+    ant \
+    libx11-dev \
+    libxmu-dev \
+    libglu1-mesa-dev \
+    libgl2ps-dev \
+    libxi-dev \
+    g++ \
+    libzip-dev \
+    libpng12-dev \
+    libcurl4-gnutls-dev \
+    libfontconfig1-dev \
+    libsqlite3-dev \
+    libglew*-dev \
+    libssl-dev \
+    libgnutls-dev \
+    xorg-dev \
+    libglu1-mesa-dev \
+    cmake
+
+########################################
+# Set ant environment
+ENV ANT_ROOT /usr/bin/ant
+
+########################################
+# Install Android SDK
+ENV ANDROID_SDK_ROOT /opt/android-sdk-linux
+
+RUN cd /opt && wget -q https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz -O android-sdk.tgz \
+    && tar -zxvf android-sdk.tgz \
+    && rm -f android-sdk.tgz
+
+ENV PATH ${PATH}:${ANDROID_SDK_ROOT}:${ANDROID_SDK_ROOT}/tools
+
+# NOTE: google is blocked by GFW in China,
+# So I use the proxy: http://android-mirror.bugly.qq.com:8080.
+# You can remove `--proxy-host android-mirror.bugly.qq.com --proxy-port 8080 -s`
+# in the following commands if you don't have to worry about this issue.
+RUN echo y | android update sdk --no-ui --all --filter platform-tools --proxy-host android-mirror.bugly.qq.com --proxy-port 8080 -s | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter extra-android-support --proxy-host android-mirror.bugly.qq.com --proxy-port 8080 -s | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter android-20 --proxy-host android-mirror.bugly.qq.com --proxy-port 8080 -s | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter build-tools-20.0.0 --proxy-host android-mirror.bugly.qq.com --proxy-port 8080 -s | grep 'package installed'
+
+########################################
+# Install Android NDK
+ENV ANDROID_NDK_ROOT /opt/android-ndk-r10e
+ENV NDK_ROOT /opt/android-ndk-r10e
+
+RUN cd /opt && wget -q http://dl.google.com/android/repository/android-ndk-r10e-linux-x86_64.zip -O android-ndk.zip \
+    && unzip -q android-ndk.zip \
+    && rm -f android-ndk.zip
+
+ENV PATH ${PATH}:${ANDROID_NDK_ROOT}
+
+########################################
+# Install glfw
+ENV GLFW_VERSION "3.0.4"
+ENV GLFW_SOURCE "https://codeload.github.com/glfw/glfw/tar.gz/${GLFW_VERSION}"
+
+RUN mkdir /opt/glfw \
+    && cd /opt/glfw \
+    && wget -q https://codeload.github.com/glfw/glfw/tar.gz/${GLFW_VERSION} -O glfw.tar.gz \
+    && tar xzf glfw.tar.gz \
+    && cd ./glfw-${GLFW_VERSION} \
+    && cmake -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON \
+    && make \
+    && make install \
+    && ldconfig \
+    && rm -rf /opt/glfw
+
+########################################
+# Set cocos2d-x environment
+ENV COCOS_X_ROOT /opt/cocos2d-x
+
+# RUN cd ${COCOS_X_ROOT} && DEBIAN_FRONTEND=noninteractive ./build/install-deps-linux.sh
+
+ENV PATH ${PATH}:${COCOS_X_ROOT}:${COCOS_X_ROOT}/tools/cocos2d-console/bin
+
+########################################
+# Set quick-x environment
+ENV QUICK_V3_ROOT /opt/quick-x
+
+########################################
+# Cleaning
+RUN apt-get clean
