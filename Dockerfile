@@ -40,7 +40,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential \
     libgnutls-dev \
     xorg-dev \
     libglu1-mesa-dev \
-    cmake
+    cmake \
+    git
 
 ########################################
 # Set ant environment
@@ -90,15 +91,15 @@ RUN mkdir /opt/glfw \
 
 ########################################
 # Set cocos2d-x environment
-ENV COCOS_X_ROOT /opt/cocos2d-x
-
-# RUN cd ${COCOS_X_ROOT} && DEBIAN_FRONTEND=noninteractive ./build/install-deps-linux.sh
-
-ENV PATH ${PATH}:${COCOS_X_ROOT}:${COCOS_X_ROOT}/tools/cocos2d-console/bin
+# Only need cocos2d-console since the source code of cocos2d-x will be included in your project.
+ENV COCOS_X_CONSOLE_ROOT /opt/cocos2d-console/bin
+RUN cd /opt && git clone https://github.com/cocos2d/cocos2d-console.git
+ENV PATH ${PATH}:${COCOS_X_CONSOLE_ROOT}
 
 ########################################
 # Set quick-x environment
 ENV QUICK_V3_ROOT /opt/quick-x
+RUN git clone https://github.com/dualface/v3quick.git ${QUICK_V3_ROOT}
 
 ########################################
 # Cleaning
