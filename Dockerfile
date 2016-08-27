@@ -40,7 +40,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential \
     xorg-dev \
     libglu1-mesa-dev \
     cmake \
-    git
+    git \
+    lib32stdc++6 \
+    lib32z1
 
 ########################################
 # Set ant environment
