@@ -40,7 +40,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential \
     xorg-dev \
     libglu1-mesa-dev \
     cmake \
-    git \
     lib32stdc++6 \
     lib32z1
 
@@ -99,8 +98,10 @@ ENV PATH ${PATH}:${COCOS_X_CONSOLE_ROOT}
 
 ########################################
 # Set quick-x environment
-ENV QUICK_V3_ROOT /opt/quick-x
-RUN git clone https://github.com/dualface/v3quick.git ${QUICK_V3_ROOT}
+ENV QUICK_V3_ROOT /opt/v3quick-3
+RUN cd /opt && wget https://codeload.github.com/dualface/v3quick/tar.gz/v3 -O /tmp/v3quick.tar.gz \
+    && tar zxf v3quick.tar.gz \
+    && rm -rf /opt/v3quick.tar.gz
 
 ########################################
 # Cleaning
