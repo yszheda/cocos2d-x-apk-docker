@@ -22,7 +22,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential \
     php5 \
     python \
     oracle-java6-installer \
-    rsync \
     ant \
     libx11-dev \
     libxmu-dev \
