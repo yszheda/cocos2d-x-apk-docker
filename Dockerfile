@@ -92,14 +92,16 @@ RUN mkdir /opt/glfw \
 ########################################
 # Set cocos2d-x environment
 # Only need cocos2d-console since the source code of cocos2d-x will be included in your project.
-ENV COCOS_X_CONSOLE_ROOT /opt/cocos2d-console/bin
-RUN cd /opt && git clone https://github.com/cocos2d/cocos2d-console.git
+ENV COCOS_X_CONSOLE_ROOT /opt/cocos2d-console-3/bin
+RUN cd /opt && wget https://codeload.github.com/cocos2d/cocos2d-console/tar.gz/v3 -O cocos2d-console.tar.gz \
+    && tar zxf cocos2d-console.tar.gz \
+    && rm -rf cocos2d-console.tar.gz
 ENV PATH ${PATH}:${COCOS_X_CONSOLE_ROOT}
 
 ########################################
 # Set quick-x environment
 ENV QUICK_V3_ROOT /opt/v3quick-3
-RUN cd /opt && wget https://codeload.github.com/dualface/v3quick/tar.gz/v3 -O /tmp/v3quick.tar.gz \
+RUN cd /opt && wget https://codeload.github.com/dualface/v3quick/tar.gz/v3 -O v3quick.tar.gz \
     && tar zxf v3quick.tar.gz \
     && rm -rf /opt/v3quick.tar.gz
 
