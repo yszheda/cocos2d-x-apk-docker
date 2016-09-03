@@ -108,3 +108,8 @@ RUN cd /opt && wget https://codeload.github.com/dualface/v3quick/tar.gz/v3 -O v3
 ########################################
 # Cleaning
 RUN apt-get clean
+
+# Set project path
+WORKDIR /opt/proj
+
+ENTRYPOINT ["/bin/bash", "cocos", "-m", "debug", "-p", "android", "--compile-script", "0"]
