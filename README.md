@@ -7,5 +7,5 @@ Build quick-cocos2d-x/cocos2d-x android apk in Docker
 ## usage
 
 ```
-docker run -d <your code>:/opt/proj yysg/apk:latest
+docker run -d <your code>:/opt/proj galoisplusplus/quick-x-apk-docker:latest
 ```
