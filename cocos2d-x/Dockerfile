@@ -25,8 +25,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -qq \
     && echo "debconf shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections \
     && echo "debconf shared/accepted-oracle-license-v1-1 seen true" | debconf-set-selections \
     && DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:webupd8team/java \
-    && apt-get update -qq
-    &&DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential \
+    && apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential \
         wget \
         zip \
         unzip \
