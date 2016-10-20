@@ -76,7 +76,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -qq \
     && make install \
     && ldconfig \
     && rm -rf /opt/glfw \
-RUN cd /opt && wget https://codeload.github.com/cocos2d/cocos2d-console/tar.gz/v3 -O cocos2d-console.tar.gz \
+    && cd /opt \
+    && wget https://codeload.github.com/cocos2d/cocos2d-console/tar.gz/v3 -O cocos2d-console.tar.gz \
     && tar zxf cocos2d-console.tar.gz \
     && rm -rf cocos2d-console.tar.gz \
     # Cleaning
